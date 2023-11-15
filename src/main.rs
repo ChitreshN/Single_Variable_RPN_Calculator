@@ -22,9 +22,9 @@ struct Exp {
     oper: Operators,
 }
 
-fn eval(x: u32, y: u32, op: Operators) -> u32 {
+fn eval(x: i32, y: i32, op: Operators) -> i32 {
     match op {
-        Operators::Expo => x.pow(y),
+        Operators::Expo => x.pow(y.try_into().unwrap()),
         Operators::Mul => x * y,
         Operators::Div => x / y,
         Operators::Add => x + y,
@@ -32,40 +32,41 @@ fn eval(x: u32, y: u32, op: Operators) -> u32 {
     }
 }
 
-fn exp_eval(expression: String) -> u32 {
+fn oper(x : &str)-> Operators{
+    match x{
+        "^" => Operators::Expo,
+        "/" => Operators::Div,
+        "*" => Operators::Mul,
+        "-" => Operators::Sub,
+        "+" => Operators::Add,
+         _  => !todo!(),
+    }
+}
+
+fn exp_eval(expression: String) -> i32 {
     let mut stack = Vec::new();
     // iterator
     let parts = expression.split_whitespace();
     for part in parts {
         match part {
-            "^" => {
-                let x: u32 = stack.pop().expect("Stack empty");
-                let y: u32 = stack.pop().expect("Stack empty");
-                stack.push(eval(y, x, Operators::Expo));
-            }
-            "*" => {
-                let x: u32 = stack.pop().expect("Stack empty");
-                let y: u32 = stack.pop().expect("Stack empty");
-                stack.push(eval(y, x, Operators::Mul));
-            }
-            "/" => {
-                let x: u32 = stack.pop().expect("Stack empty");
-                let y: u32 = stack.pop().expect("Stack empty");
-                stack.push(eval(y, x, Operators::Div));
-            }
-            "-" => {
-                let x: u32 = stack.pop().expect("Stack empty");
-                let y: u32 = stack.pop().expect("Stack empty");
-                stack.push(eval(y, x, Operators::Sub));
-            }
-            "+" => {
-                let x: u32 = stack.pop().expect("Stack empty");
-                let y: u32 = stack.pop().expect("Stack empty");
-                stack.push(eval(y, x, Operators::Add));
-            }
+            "^"
+                | "*"
+                | "/"
+                | "-"
+                | "+"=> {
+                    let x: i32 = stack.pop().expect("Stack empty");
+                    let y: i32 = stack.pop().expect("Stack empty");
+                    stack.push(eval(y, x, oper(part)));
+                }
             _ => {
-                let num: u32 = part.trim().parse().expect("");
-                stack.push(num);
+                if part.chars().nth(0) == Some('-'){
+                    let num: i32 = part[1..].trim().parse().expect("Not valid");
+                    stack.push(-(num));
+                }
+                else {
+                    let num: i32 = part.trim().parse().expect("Not valid number");
+                    stack.push(num);
+                }
             }
         }
     }
