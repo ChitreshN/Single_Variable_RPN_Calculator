@@ -8,6 +8,8 @@ use std::io;
 // exp * exp * DIV
 // exp * exp * SUB
 
+// [TODO] => Modularize code
+
 enum Operators {
     Expo,
     Div,
@@ -16,11 +18,6 @@ enum Operators {
     Sub,
 }
 
-struct Exp {
-    exp1: Box<Exp>,
-    exp2: Box<Exp>,
-    oper: Operators,
-}
 
 fn eval(x: i32, y: i32, op: Operators) -> i32 {
     match op {
@@ -39,7 +36,7 @@ fn oper(x : &str)-> Operators{
         "*" => Operators::Mul,
         "-" => Operators::Sub,
         "+" => Operators::Add,
-         _  => !todo!(),
+         _  => panic!("Invalid operator"),
     }
 }
 
