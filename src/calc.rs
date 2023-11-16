@@ -17,7 +17,7 @@ fn eval(x: i32, y: i32, op: Operators) -> i32 {
         Operators::Div =>{
             if y == 0{
                 println!("NAN");
-                exit(1) 
+                exit(0) 
             }
             x / y
         } ,
@@ -39,11 +39,10 @@ fn oper(x : &str)-> Operators{
 
 pub fn exp_eval(expression: String) -> i32 {
     let mut stack = Vec::new();
-    // iterator
     let parts = expression.split_whitespace();
     for part in parts {
         match part {
-            "^"
+                  "^"
                 | "*"
                 | "/"
                 | "-"
@@ -65,5 +64,9 @@ pub fn exp_eval(expression: String) -> i32 {
         }
     }
     let res = stack.pop().expect("Invalid expression");
+    if stack.len() != 0{
+        println!("Invalid Expression");
+        exit(0);
+    }
     res
 }

@@ -1,14 +1,6 @@
 use std::{io, process::exit};
 pub mod calc;
-// expression???
-// const
-// var
-// exp * exp * PLUS
-// exp * exp * MUL
-// exp * exp * DIV
-// exp * exp * SUB
 
-// [TODO] => Modularize code
 fn main() {
     let mut expression = String::new();
     io::stdin()
