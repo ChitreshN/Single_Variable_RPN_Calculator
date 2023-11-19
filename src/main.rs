@@ -7,6 +7,9 @@ fn main() {
         .read_line(&mut expression)
         .expect("Failed to read");
     let res = calc::exp_eval(expression);
-    println!("{}", res);
+    match res {
+        Some(x) => println!("{}",x),
+        None => return
+    }
     exit(0);
 }
